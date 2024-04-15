@@ -1,7 +1,7 @@
 import { QuestionRepository } from '../repositories/question-repository'
 
 interface DeleteQuestionUseCaseRequest {
-    authorId: string
+  authorId: string
   questionId: string
 }
 
@@ -20,8 +20,8 @@ export class DeleteQuestionUseCase {
       throw new Error('Question not found.')
     }
 
-    if(authorId !== question.authorId.toString()){
-        throw new Error('Not allowed.')
+    if (authorId !== question.authorId.toString()) {
+      throw new Error('Not allowed.')
     }
 
     await this.questionsRepository.delete(question)
