@@ -1,17 +1,21 @@
+import {faker} from '@faker-js/faker'
+
 import { UniqueEntityID } from "@/core/entities/unique-entity-id";
 import { Questions, QuestionsProps } from "@/domain/forum/enterprise/entities/question";
-import { Slug } from "@/domain/forum/enterprise/entities/value-objects/slug";
+
 
 export function makeQuestion(
-    override: Partial<QuestionsProps> = {}
+    override: Partial<QuestionsProps> = {},
+    id?: UniqueEntityID,
 ){
    const question =  Questions.create({
-        title:'Example question',
-        slug: Slug.create('example-question'),
+        title: faker.lorem.sentence(),
         authorId: new UniqueEntityID(),
-        content:'Example content',
+        content: faker.lorem.text(),
         ...override
-    })
+    },
+    id
+)
 
     return question
 }
