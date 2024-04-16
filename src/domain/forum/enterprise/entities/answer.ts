@@ -6,7 +6,7 @@ export interface AnswerProps {
   authorId: UniqueEntityID
   questionId: UniqueEntityID
   content: string
-  createAt: Date
+  createdAt: Date
   updatedAt?: Date
 }
 
@@ -20,8 +20,8 @@ export class Answer extends Entity<AnswerProps> {
   get content() {
     return this.props.content
   }
-  get createAt() {
-    return this.props.createAt
+  get createdAt() {
+    return this.props.createdAt
   }
   get updatedAt() {
     return this.props.updatedAt
@@ -40,11 +40,11 @@ export class Answer extends Entity<AnswerProps> {
     this.touch()
   }
 
-  static create(props: Optional<AnswerProps, 'createAt'>, id?: UniqueEntityID) {
+  static create(props: Optional<AnswerProps, 'createdAt'>, id?: UniqueEntityID) {
     const answer = new Answer(
       {
         ...props,
-        createAt: new Date(),
+        createdAt: props.createdAt ?? new Date(),
       },
       id
     )
