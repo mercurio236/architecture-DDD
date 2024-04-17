@@ -1,12 +1,12 @@
 import { PaginationParams } from "@/core/repositories/pagination-params";
-import { Questions } from "../../enterprise/entities/question";
+import { Question } from "../../enterprise/entities/question";
 
 
 export interface QuestionRepository{
-    findById(id: string): Promise<Questions | null>
-    findBySlug(slug: string): Promise<Questions | null>
-    findManyRecent(params: PaginationParams):Promise<Questions[]>
-    save(question: Questions ): Promise<void>
-    create(question: Questions ): Promise<void>
-    delete(question: Questions): Promise<void>
+    findById(id: string): Promise<Question | null>
+    findBySlug(slug: string): Promise<Question | null>
+    findManyRecent(params: PaginationParams):Promise<Question[]>
+    save(question: Question ): Promise<void>
+    create(question: Question ): Promise<void>
+    delete(question: Question): Promise<void>
 }
