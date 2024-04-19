@@ -4,37 +4,53 @@ import { InMemoryAnswerRepository } from 'test/respositories/in-memory-answers-r
 import { DeleteAnswerUseCase } from './delete-answer'
 import { makeAnswer } from 'test/factories/make-answer'
 import { NotAllowedError } from './errors/not-allowed-error'
+import { InMemoryAnswerAttachmentRepository } from 'test/respositories/in-memory-answer-attachements-repository'
+import { makeAnswerAttachment } from 'test/factories/make-answer-attachment'
 
 let inMemoryAnswersRepository: InMemoryAnswerRepository
+let inMemoryAnswerAttachmentRepository: InMemoryAnswerAttachmentRepository
 let sut: DeleteAnswerUseCase
 
 describe('Delete Answer', () => {
   beforeEach(() => {
-    inMemoryAnswersRepository = new InMemoryAnswerRepository()
+    inMemoryAnswerAttachmentRepository = new InMemoryAnswerAttachmentRepository()
+    inMemoryAnswersRepository = new InMemoryAnswerRepository(inMemoryAnswerAttachmentRepository)
     sut = new DeleteAnswerUseCase(inMemoryAnswersRepository)
 
     //system under test
   })
 
-  it('should be able to delete a question', async () => {
+  it('should be able to delete a answer', async () => {
     const newAnswer = makeAnswer(
       {
         authorId: new UniqueEntityID('author-1'),
       },
-      new UniqueEntityID('question-1')
+      new UniqueEntityID('answer-1')
     )
 
     inMemoryAnswersRepository.create(newAnswer)
 
+    inMemoryAnswerAttachmentRepository.items.push(
+      makeAnswerAttachment({
+        answerId: newAnswer.id,
+        attachmentId: new UniqueEntityID('1'),
+      }),
+      makeAnswerAttachment({
+        answerId: newAnswer.id,
+        attachmentId: new UniqueEntityID('2'),
+      }),
+    )
+
     await sut.execute({
-      answerId: 'question-1',
+      answerId: 'answer-1',
       authorId: 'author-1',
     })
 
     expect(inMemoryAnswersRepository.items).toHaveLength(0)
+    expect(inMemoryAnswerAttachmentRepository.items).toHaveLength(0)
   })
 
-  it('should not be able to delete a question from another user', async () => {
+  it('should not be able to delete a answer from another user', async () => {
     const newAnswer = makeAnswer(
       {
         authorId: new UniqueEntityID('author-1'),
