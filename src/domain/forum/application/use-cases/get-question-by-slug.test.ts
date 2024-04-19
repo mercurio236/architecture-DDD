@@ -9,30 +9,31 @@ let inMemoryQuestionAttachmentRepository =
   new InMemoryQuestionAttachmentRepository()
 let sut: GetQuestionBySlugUseCase
 
-describe('Get Question By Slug', () =>{
-    beforeEach(() =>{
-        inMemoryQuestionsRepository = new InMemoryQuestionsRepository(inMemoryQuestionAttachmentRepository)
-        sut = new GetQuestionBySlugUseCase(inMemoryQuestionsRepository)
+describe('Get Question By Slug', () => {
+  beforeEach(() => {
+    inMemoryQuestionsRepository = new InMemoryQuestionsRepository(
+      inMemoryQuestionAttachmentRepository
+    )
+    sut = new GetQuestionBySlugUseCase(inMemoryQuestionsRepository)
 
-        //system under test
+    //system under test
+  })
+
+  it('should be able to get a question by slug', async () => {
+    const newQuestion = makeQuestion({
+      slug: Slug.create('example-question'),
     })
 
-    it('should be able to get a question by slug', async () =>{
-        const newQuestion = makeQuestion({
-            slug: Slug.create('example-question')
-        })
-        
-        inMemoryQuestionsRepository.create(newQuestion)
-        
-        const result = await sut.execute({
-            slug:'example-question'
-        })
+    inMemoryQuestionsRepository.create(newQuestion)
 
-        
-    
-        expect(result.value?.question.id).toBeTruthy()
-        expect(result.value?.question.title).toEqual(newQuestion.title)
-       
+    const result = await sut.execute({
+      slug: 'example-question',
     })
 
+    expect(result.value).toMatchObject({
+      question: expect.objectContaining({
+        title: newQuestion.title,
+      }),
+    })
+  })
 })
