@@ -3,6 +3,7 @@ import { Question } from '../../enterprise/entities/question'
 import { QuestionRepository } from '../repositories/question-repository'
 import { Either, right } from '@/core/either'
 import { QuestionAttachment } from '../../enterprise/entities/question-attachment'
+import { QuestionAttachmentList } from '../../enterprise/entities/question-attachment-list'
 
 interface CreateQuestionUseCaseRequest {
   authorId: string
@@ -25,23 +26,22 @@ export class CreateQuestionUseCase {
     authorId,
     title,
     content,
-    attachmentIds
+    attachmentIds,
   }: CreateQuestionUseCaseRequest): Promise<CreateQuestionUseCaseResponse> {
-    
     const question = Question.create({
       authorId: new UniqueEntityID(authorId),
       title,
       content,
     })
 
-    const questionAttachments = attachmentIds.map(attachmentId => {
+    const questionAttachments = attachmentIds.map((attachmentId) => {
       return QuestionAttachment.create({
         attachmentId: new UniqueEntityID(attachmentId),
-        questionId: question.id
+        questionId: question.id,
       })
     })
 
-    question.attachments = questionAttachments
+    question.attachments = new QuestionAttachmentList(questionAttachments)
 
     await this.questionsRepository.create(question)
 
