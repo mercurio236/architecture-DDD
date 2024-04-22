@@ -5,7 +5,7 @@ import { ChooseQuestionBestAnswerUseCase } from '@/domain/forum/application/use-
 import { makeQuestion } from 'test/factories/make-question'
 import { InMemoryQuestionsRepository } from 'test/respositories/in-memory-questions-respository'
 import { InMemoryAnswerRepository } from 'test/respositories/in-memory-answers-repository'
-import { NotAllowedError } from './errors/not-allowed-error'
+import { NotAllowedError } from '@/core/errors/errors/not-allowed-error'
 import { InMemoryAnswerAttachmentRepository } from 'test/respositories/in-memory-answer-attachements-repository'
 import { InMemoryQuestionAttachmentRepository } from 'test/respositories/in-memory-question-attachment-respository'
 
